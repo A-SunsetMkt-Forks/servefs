@@ -1,4 +1,3 @@
-import inspect
 import os
 from pathlib import Path
 from typing import Optional
@@ -7,6 +6,8 @@ import typer
 import uvicorn
 from rich.console import Console
 from rich.panel import Panel
+
+from servefs.utils.network import get_local_addresses
 
 app = typer.Typer(
     name="servefs",
@@ -89,9 +90,19 @@ def main(
         os.environ["SERVEFS_BASIC_AUTH"] = basic_auth
     
     # Display server information
+    if host == "0.0.0.0":
+        # Show all available addresses
+        addresses = get_local_addresses()
+        address_lines = []
+        for addr in addresses:
+            address_lines.append(f"[bold]http://{addr}:{port}[/bold]")
+        server_info = "\n".join(address_lines)
+    else:
+        server_info = f"[bold]http://{host}:{port}[/bold]"
+    
     console.print(Panel.fit(
         f"[bold green]Starting server at[/bold green]\n"
-        f"[bold]http://{host}:{port}[/bold]\n"
+        f"{server_info}\n"
         f"[bold blue]Root directory:[/bold blue] {os.environ['SERVEFS_ROOT']}\n"
         f"[bold yellow]Developer mode:[/bold yellow] {'enabled' if debug else 'disabled'}\n"
         "\n[dim]Press Ctrl+C to quit[/dim]",

@@ -9,14 +9,18 @@ from typing import AsyncIterator, Optional, Union
 
 import aiofiles
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
+from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse, RedirectResponse
 
 from ..utils.static import ETaggedStaticFiles
+from ..utils.cdn_cache import CDNCacheManager
 
 logger = logging.getLogger(__name__)
 
 # Get current module path
 PACKAGE_DIR = Path(__file__).parent.parent
+
+# Initialize CDN cache manager
+cdn_cache_manager = CDNCacheManager(PACKAGE_DIR / "static" / "cdn_cache")
 
 router = APIRouter(tags=["page"])
 
@@ -121,6 +125,17 @@ async def handle_file_request(
 def init_static_files(app):
     """Initialize static file serving"""
     app.mount("/static", ETaggedStaticFiles(directory=PACKAGE_DIR / "static"), name="static")
+
+@router.get("/cdn/{url:path}")
+async def proxy_cdn(url: str, request: Request):
+    """Proxy requests to CDN with local caching"""
+    full_url = f'https://{url}'
+    response = await cdn_cache_manager.serve_cached_resource(full_url, request)
+    
+    if response:
+        return response
+    # If caching failed, redirect to original URL
+    return RedirectResponse(url=full_url, status_code=302)
 
 # Serve index.html for the root path
 @router.get("/", response_class=HTMLResponse)

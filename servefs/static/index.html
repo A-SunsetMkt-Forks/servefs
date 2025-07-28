@@ -6,13 +6,13 @@
     <title>ServeFS</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <!-- Import Vue 3 -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/cdn/unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Import Element Plus -->
-    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
-    <script src="https://unpkg.com/element-plus"></script>
+    <link rel="stylesheet" href="/cdn/unpkg.com/element-plus/dist/index.css">
+    <script src="/cdn/unpkg.com/element-plus"></script>
     <!-- Import Element Plus Icons -->
-    <script src="https://unpkg.com/@element-plus/icons-vue"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <script src="/cdn/unpkg.com/@element-plus/icons-vue"></script>
+    <script src="/cdn/cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -78,7 +78,7 @@
 
                 <div class="path-nav">
                     <el-breadcrumb separator="/">
-                        <el-breadcrumb-item @click="navigateTo('')">🏠 Home</el-breadcrumb-item>
+                        <el-breadcrumb-item @click="navigateTo('')">Home</el-breadcrumb-item>
                         <el-breadcrumb-item 
                             v-for="(segment, index) in pathSegments" 
                             :key="index"
@@ -289,7 +289,7 @@
             </template>
         </el-dialog>
     </div>
-    <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="/cdn/unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="/static/js/index.js"></script>
     
 </body>
